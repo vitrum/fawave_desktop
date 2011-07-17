@@ -86,6 +86,10 @@ var TSINA_APPKEYS = {
  * constant 常量
  */
 FaWave.CONST = {
+	// oAuth callback
+	OAUTH_CALLBACK_URL: "app://" + Titanium.App.getID() + "/fawave/oauth_cb.html",
+	FAWAVE_OAUTH_CALLBACK_URL: "http://fawave.net4team.net/",
+
     T_LIST:             T_LIST,
     T_NAMES:            T_NAMES,
     tabDes:             tabDes,

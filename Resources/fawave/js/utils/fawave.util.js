@@ -31,7 +31,31 @@ FaWave.Util.Url = {
             });
         }
         return r;
-    }
+    },
+	// 将字符串参数变成dict参数
+	// form: oauth_token_secret=a26e895ca88d3ddbb5ec4d9d1780964b&oauth_token=b7cbcc0dc5056509a6b85967639924df
+	// 支持完整url
+	decodeForm: function(form) {
+		var index = form.indexOf('?');
+		if(index > -1) {
+			form = form.substring(index+1);
+		}
+		var d = {};
+		var nvps = form.split('&');
+		for (var n = 0; n < nvps.length; ++n) {
+			var nvp = nvps[n];
+			if (nvp == '') {
+				continue;
+			}
+			var equals = nvp.indexOf('=');
+			if (equals < 0) {
+				d[nvp] = null;
+			} else {
+				d[nvp.substring(0, equals)] = decodeURIComponent(nvp.substring(equals + 1));
+			}
+		}
+		return d;
+	}
 };
 
 // Monkey patch

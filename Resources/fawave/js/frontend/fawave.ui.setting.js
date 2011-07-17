@@ -330,8 +330,63 @@ function saveAccount(){
         			$('#account-request-token-key').val(user.oauth_token_key);
         			$('#account-request-token-secret').val(user.oauth_token_secret);
             		var l = (window.screen.availWidth-510)/2;
-            		window.open(login_url, 'FaWaveOAuth', 'left=' + l 
-            	    		+ ',top=30,width=600,height=450,menubar=no,location=yes,resizable=no,scrollbars=yes,status=yes');
+            		//window.open(login_url, 'FaWaveOAuth', 'left=' + l 
+            	    //		+ ',top=30,width=600,height=450,menubar=no,location=yes,resizable=no,scrollbars=yes,status=yes');
+					var oauthWin = FaWave.UI.getWindowById('oauthWindow');
+					if(oauthWin){
+						oauthWin.setURL(login_url);
+						oauthWin.show();
+						oauthWin.focus();
+						oauthWin.setTopMost(true);
+						oauthWin.setTopMost(false);
+					}else{
+						var oauthWin = FaWave.UI.currentWindow.createWindow({
+									id: "oauthWindow",
+									url: login_url,
+									//title: "FaWave Setting",
+									//contents: "",
+									//baseURL: "",
+									//x: 300,
+									//y: 400,
+									width: 700,
+									minWidth: 100,
+									height: 500,
+									minHeight: 100,
+									maximizable: true,
+									minimizable: true,
+									closeable: true,
+									resizable: true,
+									fullscreen: false,
+									maximized: false,
+									minimized: false,
+									usingChrome: true,
+									topMost: false,
+									visible: true,
+									transparentBackground: false,
+									transparency: false
+								});
+						oauthWin.addEventListener(Titanium.PAGE_INITIALIZED, function(event){
+							//
+						});
+						oauthWin.addEventListener(Titanium.PAGE_LOADED, function(event){
+							if(oauthWin.url.indexOf('chrome-extension') == 0){
+								oauthWin.setURL( oauthWin.url.replace('chrome-extension', 'app') );
+								return;
+							}
+							if((oauthWin.url.indexOf(FaWave.CONST.OAUTH_CALLBACK_URL) == 0 
+									|| oauthWin.url.indexOf(FaWave.CONST.FAWAVE_OAUTH_CALLBACK_URL) == 0 )){
+									//|| oauthWin.url.indexOf(FacebookAPI.config.oauth_callback + '?code=') == 0)) {
+								var d = FaWave.Util.Url.decodeForm(oauthWin.url);
+								if(d){
+									var pin = d.oauth_verifier || d.code || 'impin';
+									$('#account-pin').val(pin);
+									$('#save-account').click();
+									oauthWin.close();
+								}
+							}
+						});
+						oauthWin.open();
+					}
     			}
     		});
     	}

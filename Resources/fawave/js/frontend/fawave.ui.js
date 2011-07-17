@@ -5,6 +5,7 @@
 
 window.FaWave = window.FaWave || {};
 FaWave.UI = {
+	winUI: Titanium.UI,
     currentWindow: Titanium.UI.currentWindow
 };
 
@@ -85,37 +86,61 @@ FaWave.UI.Msg = {
 };
 
 /************
+ * 根据ID获取win窗口
+ */
+FaWave.UI.getWindowById = function(id){
+	var wins = FaWave.UI.winUI.getWindows();
+	if(wins && wins.length){
+		for(var i=0, l=wins.length; i<l; i++){
+			if(wins[i].id == id){
+				return wins[i];
+				break;
+			}
+		}
+	}
+	return null;
+};
+
+/************
  * 打开设置窗口
  */
 FaWave.UI.openSetting = function(){
-    var sWin = FaWave.UI.currentWindow.createWindow({
-                id: "settingWindow",
-                url: "app://fawave/setting.html?tab=user",
-                title: "FaWave Setting",
-                //contents: "",
-                //baseURL: "",
-                //x: 300,
-                //y: 400,
-                width: 700,
-                minWidth: 500,
-                maxWidth: 700,
-                height: 500,
-                minHeight: 300,
-                maxHeight: 500,
-                maximizable: true,
-                minimizable: true,
-                closeable: true,
-                resizable: true,
-                fullscreen: false,
-                maximized: false,
-                minimized: false,
-                usingChrome: true,
-                topMost: false,
-                visible: true,
-                transparentBackground: false,
-                transparency: false
-            });
-    sWin.open();
+	var sWin = FaWave.UI.getWindowById('settingWindow');
+	if(sWin){
+		sWin.show();
+		sWin.focus();
+		sWin.setTopMost(true);
+		sWin.setTopMost(false);
+	}else{
+		sWin = FaWave.UI.currentWindow.createWindow({
+					id: "settingWindow",
+					url: "app://fawave/setting.html?tab=user",
+					title: "FaWave Setting",
+					//contents: "",
+					//baseURL: "",
+					//x: 300,
+					//y: 400,
+					width: 700,
+					minWidth: 500,
+					maxWidth: 700,
+					height: 500,
+					minHeight: 300,
+					maxHeight: 500,
+					maximizable: true,
+					minimizable: true,
+					closeable: true,
+					resizable: true,
+					fullscreen: false,
+					maximized: false,
+					minimized: false,
+					usingChrome: true,
+					topMost: false,
+					visible: true,
+					transparentBackground: false,
+					transparency: false
+				});
+		sWin.open();
+	}
 };
 
 
